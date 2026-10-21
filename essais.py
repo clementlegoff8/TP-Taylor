@@ -25,12 +25,14 @@ sin_der = np.vectorize(sin_der) #vectorisation
 from math import factorial
 import matplotlib.pyplot as plt
 
-def taylor1(X, derivatives): #approximation de Taylor sur X
+def taylor1(X, derivatives): #approximation de Taylor sur X, en connaissant les valeurs des dérivées successives évaluées en 0
     Y = np.zeros_like(X)
     for k in range(len(derivatives)):
         Y_k = derivatives[k]*X**k/factorial(k)
         Y = np.add(Y,Y_k)
     return Y
+
+#Test :
 
 sinus10 = [0, 1, 0, -1, 0, 1, 0, -1, 0, 1]
 X = np.linspace(-2 * np.pi, 2 * np.pi, 400)
@@ -43,12 +45,14 @@ X = np.linspace(-2 * np.pi, 2 * np.pi, 400)
 
 #3.2
 
-def taylor2(X, f, n):
+def taylor2(X, f, n): #même chose mais cette fois on calcule les dérivées nous-mêmes
     derivees = []
     for i in range(n+1):
         derivees.append(f(0.))
-        f = grad(f)
+        f = grad(f) #dérivée de f
     return taylor1(X,derivees)
+
+#Test :
 
 Y = np.sin(X)
 Y2 = taylor2(X, np.sin, 10)
@@ -57,7 +61,7 @@ Y2 = taylor2(X, np.sin, 10)
 #plt.plot(X,Y2)
 #plt.show()
 
-def taux_coincidence(Y,Y_t,seuil): #renvoie le pourcentage du domaine où Y et Y_t sont proches à seuil près
+def taux_coincidence(Y,Y_t,seuil): #renvoie la proportion du domaine où Y et Y_t sont proches à seuil près
     proches = abs(Y-Y_t) < seuil
     return proches.sum()/len(proches)
 
@@ -88,4 +92,4 @@ Y4 = taylor2(X,custom,14)
 
 #print(taux_coincidence(Y3,Y4,10**(-3)))
 
-#On obtient 61,5%
+#On obtient 61,5%.
